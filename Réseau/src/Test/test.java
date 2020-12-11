@@ -5,8 +5,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import Trame;
-import Lecture.Octet;
+import Lecture.*;
 
 public class test {
 	public static void main(String[]args) {
