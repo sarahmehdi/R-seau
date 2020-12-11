@@ -2,7 +2,6 @@
 
 import java.util.List;
 
-import Type;
 
 public class Trame {
 	
@@ -36,7 +35,7 @@ public class Trame {
 		addrMacDest = tmp.toString();
 	
 		StringBuilder tmp2 = new StringBuilder();
-		for(int i=7; i<12; i++)
+		for(int i=6; i<12; i++)
 			tmp2.append(octets.get(i));
 		addrMacSource = tmp2.toString();
 		
@@ -82,7 +81,9 @@ public class Trame {
 		
 		System.out.println("Addresse MAC source : "+addrMacSource+'\n');
 		System.out.println("Adresse MAC Destination : "+addrMacDest+'\n');
-		
 		System.out.println("Type : "+ EthType + " ("+ Type.getEthType(EthType)+")");
+		
+		System.out.println("Adresse IP Source : "+addrIPsource);
+		System.out.println("Adresse IP Destination : "+addrIPdest);
 	}
 }

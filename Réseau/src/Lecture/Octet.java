@@ -2,11 +2,11 @@ package Lecture;
 
 
 public class Octet {
-	private static String hexa; 
+	private final String hexa; 
 	
 	public Octet(String hexa) {
 		if(hexa.length()!=2) throw new IllegalArgumentException();
-		Octet.hexa = hexa;
+		this.hexa = hexa;
 	}
 	
 			
