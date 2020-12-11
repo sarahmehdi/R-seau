@@ -1,5 +1,6 @@
 package Lecture;
 
+
 public class Type {
 
 		
