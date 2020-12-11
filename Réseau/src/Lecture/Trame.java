@@ -1,4 +1,4 @@
-package Lecture;
+ package Lecture;
 
 import java.util.List;
 
@@ -12,29 +12,44 @@ public class Trame {
 	
 	private String addrIPsource;
 	private String addrIPdest;
+	private String options = "no options";
 	
 	public Trame(List<Octet> octets) {
 		if(octets == null) throw new IllegalArgumentException();
+		if(octets.size()>=13)
+			initEnteteEthernet(octets);
+		if(octets.size()>=34)
+			initPaquetIp(octets);
 		
-		initEnteteEthernet();
-		initPaquetIp();
-		initTransport();
-		initDonnees();
+			initTransport(octets);
+			initDonnees(octets);
 	}
 	
-	private void initEnteteEthernet() {
-		//initialiser les addresses mac et le protocol ethernet 0800
+	private void initEnteteEthernet(List<Octet> octets) {
+		
+		StringBuilder tmp = new StringBuilder();
+		for(int i=0; i<6; i++)
+			tmp.append(octets.get(i));
+		addrMacDest = tmp.toString();
+	
+		StringBuilder tmp2 = new StringBuilder();
+		for(int i=7; i<12; i++)
+			tmp2.append(octets.get(i));
+		addrMacSource = tmp2.toString();
+		
+		EthType = "0x"+ octets.get(12) + octets.get(13);
+		
 	}
 	
-	private void initPaquetIp() {
+	private void initPaquetIp(List<Octet> octets) {
 		//initiatiser les addresses ip et tout ce qu'il y'a quand le paquet ip meme ICMP
 	}
 	
-	private void initTransport() {
+	private void initTransport(List<Octet> octets) {
 		// init TCP ou UDP
 	}
 	
-	private void initDonnees() {
+	private void initDonnees(List<Octet> octets) {
 		// init les données si il y'en a 
 	}
 	
