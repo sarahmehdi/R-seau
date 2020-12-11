@@ -22,6 +22,13 @@ public class Octet {
 		return Integer.parseInt(Integer.toBinaryString(toDecimale()));
 	}
 	
+	public char getFirstHexa() {
+		return hexa.charAt(0);
+	}
+	public char getSecondHexa() {
+		return hexa.charAt(1);
+	}
+	
 	public String toString() {
 		return hexa + " ";
 	}
