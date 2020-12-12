@@ -1,5 +1,6 @@
 package Lecture;
 
+import java.util.List;
 
 public class Type {
 
@@ -12,12 +13,12 @@ public class Type {
 			return "Unknown";
 		}
 		
-		public static String getProtocol(String value) {
-			if(value.equals("0x01 ")) return "ICMP";
-			if(value.equals("0x06 ")) return "TCP";
-			if(value.equals("0x17 ")) return "UDP";
+		public static ITransportProtocol getProtocol(String value, List<Octet> octets, int i) {
+			if(value.equals("0x01 ")) return new ICMP(octets, i);
+			//if(value.equals("0x06 ")) return new TCP(octets, i);
+			//if(value.equals("0x17 ")) return new UDP(octets, i);
 			
-			return "Unknown";
+			return null;
 		}
 		
 }

@@ -11,11 +11,16 @@ public class Trame {
 	private String addrMacDest;
 	private String EthType;
 	
+	private int taille;
+	private String bytes;
+	private int bytesInt;
 	private String addrIPsource;
 	private String addrIPdest;
+	private String identifier;
 	private String TTL;
 	private String protocol;
 	private String checksum;
+	private int checksumInt;
 	private int options=0;
 		
 	private String IpTransportSource;
@@ -51,17 +56,24 @@ public class Trame {
 	
 	private void initPaquetIp() throws InvalidTrameException {
 		//initiatiser les addresses ip et tout ce qu'il y'a quand le paquet ip
-		int taille= Character.getNumericValue(octets.get(14).getSecondHexa());
-		if(taille < 5) throw new InvalidTrameException();
-		if(taille > 5) 
-			options = 5*taille - 20;
+		taille= 4*Character.getNumericValue(octets.get(14).getSecondHexa());
+		if(taille < 20) throw new InvalidTrameException();
+		if(taille > 20) 
+			options = taille - 20;
+		
+		bytes = "0x"+octets.get(16)+octets.get(17);
+		bytesInt = octets.get(16).toDecimale()*16 + octets.get(17).toDecimale();
+
+		identifier = "0x"+octets.get(18)+octets.get(19);
 		
 		
 		TTL = octets.get(22).toString();
 		
 		protocol = "0x"+ octets.get(23);
 		
-		checksum = octets.get(24).toString() + octets.get(25).toString();
+		checksum = "0x" + octets.get(24).toString() + octets.get(25).toString();
+		checksumInt = octets.get(24).toDecimale()*16 + octets.get(25).toDecimale();
+		
 		
 		StringBuilder tmp = new StringBuilder();
 		for(int i=26; i<30; i++)
@@ -76,7 +88,7 @@ public class Trame {
 	}
 	
 	private void initTransport() {
-		// init TCP ou UDP
+		// init ICMP ou TCP ou UDP
 		int index = 34+options;
 		
 		StringBuilder tmp = new StringBuilder();
@@ -104,12 +116,15 @@ public class Trame {
  
 		System.out.println("Type : "+EthType+" ("+Type.getEthType(EthType)+")");
 		
+		System.out.println("Head length : "+taille);
+		System.out.println("Total length : "+bytes+" ("+bytesInt+")");
+		System.out.println("Identifier : "+identifier);
 		System.out.println("Adresse IP Source : "+addrIPsource);
 		System.out.println("Adresse IP Destination : "+addrIPdest);
 		
 		System.out.println("Time To Leave : "+TTL);
-		System.out.println("Checksum IP : "+checksum);
-		System.out.println("Protocol : "+protocol+" ("+Type.getProtocol(protocol)+")");
+		System.out.println("Checksum IP : "+checksum+" ("+checksumInt+")");
+		System.out.println(Type.getProtocol(protocol, octets, taille+14).toString() );
 		
 		
 		System.out.println('\n');
