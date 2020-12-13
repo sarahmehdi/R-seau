@@ -17,6 +17,9 @@ public class Trame {
 	private String addrIPsource;
 	private String addrIPdest;
 	private String identifier;
+	private String DF = "0 (no)";
+	private String MF = "0 (no)";
+	private String fragmentOffset;
 	private String TTL;
 	private String protocol;
 	private String checksum;
@@ -66,7 +69,13 @@ public class Trame {
 
 		identifier = "0x"+octets.get(18)+octets.get(19);
 		
-		
+		int indice = octets.get(20).toBinaire()/10000;
+		if(indice % 2 ==1)
+			MF = "1 (yes)";
+		indice = indice/10;
+		if(indice % 2==1)
+			DF = "1 (yes)";
+			
 		TTL = octets.get(22).toString();
 		
 		protocol = "0x"+ octets.get(23);
@@ -98,8 +107,8 @@ public class Trame {
 		
 		StringBuilder tmp2 = new StringBuilder();
 		for(int i=index+4; i<index+8; i++) 
-			tmp.append(octets.get(i));
-		IpTransportSource = tmp.toString();
+			tmp2.append(octets.get(i));
+		IpTransportSource = tmp2.toString();
 		
 	}
 	
@@ -119,6 +128,8 @@ public class Trame {
 		System.out.println("Head length : "+taille);
 		System.out.println("Total length : "+bytes+" ("+bytesInt+")");
 		System.out.println("Identifier : "+identifier);
+		System.out.println("DF : "+DF);
+		System.out.println("MF : "+MF);
 		System.out.println("Adresse IP Source : "+addrIPsource);
 		System.out.println("Adresse IP Destination : "+addrIPdest);
 		
