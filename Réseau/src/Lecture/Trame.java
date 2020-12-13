@@ -19,38 +19,34 @@ public class Trame {
 	private String identifier;
 	private String DF = "0 (no)";
 	private String MF = "0 (no)";
-	private String fragmentOffset;
+	private int fragmentOffset;
 	private String TTL;
 	private String protocol;
 	private String checksum;
 	private int checksumInt;
 	private int options=0;
 		
-	private String IpTransportSource;
-	private String IpTransportDest;
 	
 	public Trame(List<Octet> o) throws InvalidTrameException {
 		if(o == null) throw new IllegalArgumentException();
 		octets=o;
-		if(octets.size()>=13)
-			initEnteteEthernet();
-		if(octets.size()>=34)
-			initPaquetIp();
-		
-			initTransport();
-			initDonnees();
+		initEnteteEthernet();
+		initPaquetIp();		
+		initDonnees();
 	}
 	
 	private void initEnteteEthernet() {
 		
 		StringBuilder tmp = new StringBuilder();
-		for(int i=0; i<6; i++)
-			tmp.append(octets.get(i));
+		tmp.append(octets.get(0));
+		for(int i=1; i<6; i++)
+			tmp.append(": "+octets.get(i));
 		addrMacDest = tmp.toString();
 	
 		StringBuilder tmp2 = new StringBuilder();
-		for(int i=6; i<12; i++)
-			tmp2.append(octets.get(i));
+		tmp2.append(octets.get(6));
+		for(int i=7; i<12; i++)
+			tmp2.append(": "+octets.get(i));
 		addrMacSource = tmp2.toString();
 		
 		EthType = "0x"+ octets.get(12) + octets.get(13);
@@ -75,42 +71,32 @@ public class Trame {
 		indice = indice/10;
 		if(indice % 2==1)
 			DF = "1 (yes)";
-			
+		
+		fragmentOffset = ((octets.get(20).toBinaire()/10000)%2)*2048 + Character.getNumericValue(octets.get(20).getSecondHexa())*65536 + octets.get(21).toDecimale();
+		fragmentOffset = fragmentOffset*8;
+		
 		TTL = octets.get(22).toString();
 		
 		protocol = "0x"+ octets.get(23);
 		
-		checksum = "0x" + octets.get(24).toString() + octets.get(25).toString();
+		checksum = "0x" + octets.get(24).toString() + octets.get(25).toString(); 
 		checksumInt = octets.get(24).toDecimale()*16 + octets.get(25).toDecimale();
 		
 		
 		StringBuilder tmp = new StringBuilder();
-		for(int i=26; i<30; i++)
-			tmp.append(octets.get(i));
+		tmp.append(octets.get(26).toDecimale());
+		for(int i=27; i<30; i++)
+			tmp.append("."+octets.get(i).toDecimale());
 		addrIPsource = tmp.toString();
 		
 		StringBuilder tmp2 = new StringBuilder();
-		for(int i=30; i<34; i++)
-			tmp2.append(octets.get(i));
+		tmp2.append(octets.get(30).toDecimale());
+		for(int i=31; i<34; i++)
+			tmp2.append("."+octets.get(i).toDecimale());
 		addrIPdest = tmp2.toString();
 		
 	}
 	
-	private void initTransport() {
-		// init ICMP ou TCP ou UDP
-		int index = 34+options;
-		
-		StringBuilder tmp = new StringBuilder();
-		for(int i=index; i<index+4; i++) 
-			tmp.append(octets.get(i));
-		IpTransportSource = tmp.toString();
-		
-		StringBuilder tmp2 = new StringBuilder();
-		for(int i=index+4; i<index+8; i++) 
-			tmp2.append(octets.get(i));
-		IpTransportSource = tmp2.toString();
-		
-	}
 	
 	private void initDonnees() {
 		// init les données si il y'en a 
@@ -130,6 +116,7 @@ public class Trame {
 		System.out.println("Identifier : "+identifier);
 		System.out.println("DF : "+DF);
 		System.out.println("MF : "+MF);
+		System.out.println("Fragement Offset : "+fragmentOffset);
 		System.out.println("Adresse IP Source : "+addrIPsource);
 		System.out.println("Adresse IP Destination : "+addrIPdest);
 		
