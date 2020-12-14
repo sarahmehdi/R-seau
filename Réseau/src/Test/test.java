@@ -17,23 +17,34 @@ public class test {
 		List<Octet> octets = new ArrayList<>();
 		Trame tr;
 		
+		int offsetControl = 0;
+		int lastlength = 16;
+		int count = 0;
 		while((line = br.readLine())!=null) {
 			
 			String[] s = line.split(" ");
-			if(s.length>1) {
-				if(s[0].equals("00")) {
-					if(octets.size()>0) {
-						tr = new Trame(octets);
-						tr.afficher();
-					}
-					octets = new ArrayList<>();
+			if(s[0].equals("00")) {
+				if(octets.size()>0) {
+					tr = new Trame(octets);
+					tr.afficher();
 				}
-				
-				for(int i=1; i<s.length; i++) {
-					if(s[i].length() == 2)
-						octets.add(new Octet(s[i]));
+				octets = new ArrayList<>();
+				offsetControl = 0;
+			} else {
+				if(Type.hexaToInt(s[0])!=offsetControl)
+					throw new InvalidTrameException("l'offset est invalid à la ligne "+count);
+				if(lastlength < 17)
+					throw new InvalidTrameException("le nombre d'octet est invalide à la ligne "+(count-1));
+			}
+			int i;
+			for(i=1; i<s.length; i++) {
+				if(s[i].length() == 2) {
+					octets.add(new Octet(s[i]));
+					offsetControl++;
 				}
 			}
+			lastlength=i;
+			count++;
 		}
 		tr = new Trame(octets);
 		tr.afficher();

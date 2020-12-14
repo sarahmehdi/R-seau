@@ -58,7 +58,7 @@ public class Trame {
 	private void initPaquetIp() throws InvalidTrameException {
 		//initiatiser les addresses ip et tout ce qu'il y'a quand le paquet ip
 		taille= 4*Character.getNumericValue(octets.get(14).getSecondHexa());
-		if(taille < 20) throw new InvalidTrameException();
+		if(taille < 20) throw new InvalidTrameException("le IHL de la trame est invalde (IHL ="+taille+")");
 		if(taille > 20) 
 			options = taille - 20;
 		

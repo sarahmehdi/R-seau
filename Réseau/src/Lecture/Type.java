@@ -23,4 +23,13 @@ public class Type {
 			return null;
 		}
 		
+		public static int hexaToInt(String c) {
+			int x = 1;
+			int result = 0;
+			for(int i=c.length()-1; i>=0; i--) {
+				result += Character.getNumericValue(c.charAt(i))*x;
+				x=x*16;
+			}
+			return result;
+		}
 }
