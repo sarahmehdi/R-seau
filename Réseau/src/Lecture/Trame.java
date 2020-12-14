@@ -106,10 +106,11 @@ public class Trame {
 	
 	public void afficher() {
 		
-		System.out.println("Addresse MAC source : "+addrMacSource);
-		System.out.println("Adresse MAC Destination : "+addrMacDest);
+		System.out.println("Ethernet :");
+		System.out.println("      Adresse MAC source : "+addrMacSource);
+		System.out.println("      Adresse MAC Destination : "+addrMacDest);
  
-		System.out.println("Type : "+EthType+" ("+Type.getEthType(EthType)+")");
+		System.out.println("      Type : "+EthType+" ("+Type.getEthType(EthType)+")");
 		
 		System.out.println("Head length : "+taille);
 		System.out.println("Total length : "+bytes+" ("+bytesInt+")");

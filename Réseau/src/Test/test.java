@@ -20,17 +20,19 @@ public class test {
 		while((line = br.readLine())!=null) {
 			
 			String[] s = line.split(" ");
-			
-			if(s[0].equals("00")) {
-				if(octets.size()>0) {
-					tr = new Trame(octets);
-					tr.afficher();
+			if(s.length>1) {
+				if(s[0].equals("00")) {
+					if(octets.size()>0) {
+						tr = new Trame(octets);
+						tr.afficher();
+					}
+					octets = new ArrayList<>();
 				}
-				octets = new ArrayList<>();
-			}
-			
-			for(int i=1; i<s.length; i++) {
-				octets.add(new Octet(s[i]));
+				
+				for(int i=1; i<s.length; i++) {
+					if(s[i].length() == 2)
+						octets.add(new Octet(s[i]));
+				}
 			}
 		}
 		tr = new Trame(octets);

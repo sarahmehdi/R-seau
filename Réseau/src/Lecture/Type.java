@@ -15,7 +15,7 @@ public class Type {
 		
 		public static ITransportProtocol getProtocol(String value, List<Octet> octets, int i) {
 			if(value.equals("0x01 ")) return new ICMP(octets, i);
-			//if(value.equals("0x06 ")) return new TCP(octets, i);
+			if(value.equals("0x06 ")) return new TCP(octets, i);
 			//if(value.equals("0x17 ")) return new UDP(octets, i);
 			
 			return null;
