@@ -35,14 +35,14 @@ public class ICMP implements ITransportProtocol {
 	@Override
 	public String toString() {
 		StringBuilder s = new StringBuilder();
-		s.append("Protocol : ICMP (0x01) \n Code : ");
+		s.append("Protocol : ICMP (0x01) \nICMP : \n      Code : ");
 		s.append(code);
-		s.append("\n Checksum : ");
+		s.append("\n      Checksum : ");
 		s.append(checksum);
 		s.append(" ("+checksumInt+")");
-		s.append("\n Identifier : ");
+		s.append("\n      Identifier : ");
 		s.append(identifier);
-		s.append("\n Sequence Number : ");
+		s.append("\n      Sequence Number : ");
 		s.append(seqNum);
 		return s.toString();
 	}

@@ -10,6 +10,7 @@ public class Trame {
 	private String addrMacSource;
 	private String addrMacDest;
 	private String EthType;
+	private int version;
 	
 	private int taille;
 	private String bytes;
@@ -50,7 +51,8 @@ public class Trame {
 		addrMacSource = tmp2.toString();
 		
 		EthType = "0x"+ octets.get(12) + octets.get(13);
-		
+		if(Type.getEthType(EthType).equals("IPv4")) version = 4;
+		if(Type.getEthType(EthType).equals("IPv6")) version = 6;
 	}
 	
 	private void initPaquetIp() throws InvalidTrameException {
@@ -112,18 +114,25 @@ public class Trame {
  
 		System.out.println("      Type : "+EthType+" ("+Type.getEthType(EthType)+")");
 		
-		System.out.println("Head length : "+taille);
-		System.out.println("Total length : "+bytes+" ("+bytesInt+")");
-		System.out.println("Identifier : "+identifier);
-		System.out.println("DF : "+DF);
-		System.out.println("MF : "+MF);
-		System.out.println("Fragement Offset : "+fragmentOffset);
-		System.out.println("Adresse IP Source : "+addrIPsource);
-		System.out.println("Adresse IP Destination : "+addrIPdest);
+		if(Type.getEthType(EthType).equals("Unknown")) {
+			System.out.println("Le type de protocol n'est pas reconnu, on ne peut donc pas analyser votre trame :/");
+			return ;
+		}
 		
-		System.out.println("Time To Leave : "+TTL);
-		System.out.println("Checksum IP : "+checksum+" ("+checksumInt+")");
-		System.out.println(Type.getProtocol(protocol, octets, taille+14).toString() );
+		System.out.println(Type.getEthType(EthType)+" :");
+		System.out.println("      Version : "+version);
+		System.out.println("      IHL : "+taille+" bytes");
+		System.out.println("      Total length : "+bytes+" ("+bytesInt+")");
+		System.out.println("      Identifier : "+identifier);
+		System.out.println("            DF : "+DF);
+		System.out.println("            MF : "+MF);
+		System.out.println("      Fragement Offset : "+fragmentOffset);
+		System.out.println("      Adresse IP Source : "+addrIPsource);
+		System.out.println("      Adresse IP Destination : "+addrIPdest);
+		
+		System.out.println("      Time To Leave : "+TTL);
+		System.out.println("      Checksum IP : "+checksum+" ("+checksumInt+")");
+		System.out.println("      "+Type.getProtocol(protocol, octets, taille+14).toString() );
 		
 		
 		System.out.println('\n');

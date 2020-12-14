@@ -6,10 +6,12 @@ public class Type {
 
 		
 		public static String getEthType(String value) {
-			if(value.equals("0x08 00 ")) return "IPv4";
-			if(value.equals("0x08 06 ")) return "ARP";
-			if(value.equals("0x86 dd ")) return "IPv6";
-			
+			if(value.equals("0x08 00 ")) {
+				return "IPv4";
+			}
+			if(value.equals("0x86 dd ")) {
+	             return "IPv6";
+			}
 			return "Unknown";
 		}
 		

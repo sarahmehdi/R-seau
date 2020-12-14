@@ -75,15 +75,16 @@ public class TCP implements ITransportProtocol {
 	public String toString() {
 		StringBuilder s = new StringBuilder();
 		
-		s.append("Protocol : OxO6 (TCP) \n");
-		s.append(" Source port number : "+sourcePort+'\n');
-		s.append(" Destination port number : "+destPort+'\n');
-		s.append(" Sequence Number : "+seqNum+'\n');
-		s.append(" Acknowledge Number : "+AckNum+'\n');
-		s.append(" THL : "+THL+'\n');
-		s.append(" Flag : "+flag);
-		s.append(" Window : "+window+'\n');
-		s.append(" Checksum : "+checksum+" ("+checksumInt+") \n");
+		s.append("      Protocol : OxO6 (TCP) \n");
+		s.append("TCP : \n");
+		s.append("      Source port number : "+sourcePort+'\n');
+		s.append("      Destination port number : "+destPort+'\n');
+		s.append("      Sequence Number : "+seqNum+'\n');
+		s.append("      Acknowledge Number : "+AckNum+'\n');
+		s.append("      THL : "+THL+'\n');
+		s.append("      Flag : "+flag);
+		s.append("      Window : "+window+'\n');
+		s.append("      Checksum : "+checksum+" ("+checksumInt+") \n");
 		
 		return s.toString();
 	}
