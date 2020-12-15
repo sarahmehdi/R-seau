@@ -25,10 +25,12 @@ public class Type {
 			return null;
 		}
 		public static IHTTP getHttp(String value,List<Octet> octets,int i) {
-			if( tcp.getDestPort() == "80" || tcp.getSourcePort()=="80") {
-				
+			if( tcp.getDestPort() == "80" ) return new HTTPRequest(octets,i); 
+			if (tcp.getSourcePort()=="80") return new HTTPResponse(octets,i);
+			else {
+				System.out.println("protocol Unknown");
+				return null;
 			}
-			
 			
 		}
 		
