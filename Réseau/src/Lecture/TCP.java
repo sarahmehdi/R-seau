@@ -71,6 +71,12 @@ public class TCP implements ITransportProtocol {
 		return "0x06 ";
 	}
 	
+	public String getSourcePort() {
+		return sourcePort;
+	}
+	public String getDestPort() {
+		return destPort;
+	}
 	@Override
 	public String toString() {
 		StringBuilder s = new StringBuilder();
