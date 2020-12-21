@@ -3,4 +3,33 @@ une classe octet : Elle initialise une chaine de caractère hexa de deux caractèr
 				   une methode toBinary() qui converti l'hexa en binaire et des méthodes getFirtsHexa() et getSecondHexa() 
 				   
 une classe Trame : Elle parcourt une liste d'octets et initialise l'entete de l'ethernet, paquetIp et les données elle a une méthode afficher qui affiche
-					les addresses mac dest et source, 
+					les addresses mac dest et source, protocole et type
+					
+une classe TCP : 
+
+une classe ICMP: 
+
+une classe UDP:
+
+une classe HTTPRquest:  parcourt la liste des octets à partir d'un certains index et convertit le code ascii codé en héxa en char 
+
+une classe HTTPResponse: parcourt la liste des octets à partir d'un certains index et convertit le code ascii codé en héxa en char 
+
+une classe Type : 
+
+
+Hypothèses sur la trame :
+
+	ignorer l’offset (ne pas le lire)
+	
+	ligne incomplète (renvoie une erreur )
+	
+	ignorer le texte à droite 
+	
+	offset incorrecte
+	
+	l’espace entre les octets
+	
+	les octets dépassant deux caractères
+	
+	protocol  Unknown
