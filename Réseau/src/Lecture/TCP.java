@@ -11,6 +11,7 @@ public class TCP implements ITransportProtocol {
 	private String AckNum;
 	
 	private String THL;
+	private int taille;
 	private String window;
 	private String flag;
 	
@@ -32,6 +33,7 @@ public class TCP implements ITransportProtocol {
 		AckNum = s2.toString();
 		
 		THL = "0x"+octets.get(index+12).getFirstHexa();
+		taille = Character.getNumericValue(octets.get(index+12).getFirstHexa())*4;
 		
 		window = "0x"+octets.get(index+14)+octets.get(index+15);
 		
@@ -77,6 +79,10 @@ public class TCP implements ITransportProtocol {
 	public String getDestPort() {
 		return destPort;
 	}
+	
+	public int getTHL() {
+		return taille;
+	}
 	@Override
 	public String toString() {
 		StringBuilder s = new StringBuilder();
@@ -88,7 +94,7 @@ public class TCP implements ITransportProtocol {
 		s.append("      Sequence Number : "+seqNum+'\n');
 		s.append("      Acknowledge Number : "+AckNum+'\n');
 		s.append("      THL : "+THL+'\n');
-		s.append("      Flag : "+flag);
+		s.append("      Flag : "+flag+'\n');
 		s.append("      Window : "+window+'\n');
 		s.append("      Checksum : "+checksum+" ("+checksumInt+") \n");
 		

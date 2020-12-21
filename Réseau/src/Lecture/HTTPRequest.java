@@ -5,41 +5,47 @@ import java.util.List;
 
 public class HTTPRequest implements IHTTP,ITransportProtocol {
 
-	private String methode;
-	private String URL;
-	private String version;
-	private String entete;
+	private String methode = "";
+	private String URL = "";
+	private String version = "";
+	private String entete = "";
 	
 	public HTTPRequest(List<Octet> octets,int index) {
-	
-		for(Octet o: octets) {
-			if( o.equals("20")) break;
+		for(int i=index; i<octets.size(); i++) {
+			Octet o = octets.get(i);
+			if( o.toString().equals("20 ")) break;
 			methode+=(char) o.toDecimale();
 			index++;
 			
 		}
 		for(int i=index+1;i<octets.size();i++) {
-			if (octets.get(i).equals("20")) break;
+			if (octets.get(i).toString().equals("20 ")) break;
 			URL+=(char) octets.get(i).toDecimale();
 			index=i;
 		}
 		for(int i=index+1;i<octets.size();i++) {
-			if (octets.get(i).equals("0d") && octets.get(i+1).equals("0a")) break;
-			URL+=(char) octets.get(i).toDecimale();
+			if (octets.get(i).toString().equals("0d ") && octets.get(i+1).toString().equals("0a ")) break;
+			version+=(char) octets.get(i).toDecimale();
 			index=i;
 		}
 		
-		entete=methode+" "+URL+" "+version+"\n";
 		for(int i=index+1;i<octets.size();i++) {
-			if(octets.get(i).equals("0d") && octets.get(i+1).equals("0a")
-			 && octets.get(i+2).equals("0d") && octets.get(i+3).equals("0a") ) break;
-			if (octets.get(i).equals("20")) entete+="\n";
-			entete+=(char) octets.get(i).toDecimale();
+			if(octets.get(i-1).toString().equals("0d ") && octets.get(i).toString().equals("0a ")){
+				if(octets.get(i+1).toString().equals("0d ") && octets.get(i+2).toString().equals("0a ") ) break;
+				entete+= "\n      ";
+			} else 
+				entete+= (char) octets.get(i).toDecimale();
 		}
 	
 	}
 	public String toString() {
-		return entete;
+		StringBuilder s = new StringBuilder();
+		s.append("HTTP : HTTPRequest \n");
+		s.append("      Methode : "+methode);
+		s.append("\n      URL : "+URL);
+		s.append("\n      Version : "+version);
+		s.append(entete);
+		return s.toString();
 	}
  
 	@Override
