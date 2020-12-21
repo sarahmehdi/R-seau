@@ -1,0 +1,6 @@
+L'arcitecture du code : 
+une classe octet : Elle initialise une chaine de caractère hexa de deux caractères elle contient des méthode toDecimal qui convertit l'octet en décimal 
+				   une methode toBinary() qui converti l'hexa en binaire et des méthodes getFirtsHexa() et getSecondHexa() 
+				   
+une classe Trame : Elle parcourt une liste d'octets et initialise l'entete de l'ethernet, paquetIp et les données elle a une méthode afficher qui affiche
+					les addresses mac dest et source, 
