@@ -1,5 +1,6 @@
 installer eclipse 2020 
 dézipper le Dossier Réseau 
 ouvrir à partir d'éclipse (open project from file system )
-lancer le test en entrant une trame en  "ficher.txt"
+lancer le test en entrant une trame en  "data/ficher.txt"
+Résultat dans data/result
 

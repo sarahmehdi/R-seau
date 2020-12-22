@@ -4,7 +4,6 @@ import java.util.List;
 
 public class Type {
 
-		private static TCP tcp;
 		public static String getEthType(String value) {
 			if(value.equals("0x08 00 ")) {
 				return "IPv4";
@@ -17,21 +16,22 @@ public class Type {
 		
 		public static ITransportProtocol getProtocol(String value, List<Octet> octets, int i) {
 			if(value.equals("0x01 ")) return new ICMP(octets, i);
-			if(value.equals("0x06 ")) {tcp= new TCP(octets,i); return tcp;};
-			//if(value.equals("0x17 ")) return new UDP(octets, i);
+			if(value.equals("0x06 ")) return new TCP(octets, i);
+			if(value.equals("0x17 ")) return new UDP(octets, i);
 		
 
 			
 			return null;
 		}
-		public static IHTTP getHttp(String value,List<Octet> octets,int i) {
-			if( tcp.getDestPort() == "80" ) return new HTTPRequest(octets,i); 
-			if (tcp.getSourcePort()== "80") return new HTTPResponse(octets,i);
-			else {
-				System.out.println("protocol Unknown");
-				return null;
+
+		public static IHTTP getHttp(ITransportProtocol tr,List<Octet> octets, int index) {
+			if(tr instanceof TCP) {
+				TCP tcp = (TCP) tr;
+				if(tcp.getDestPort().equals("00 50 ")) return new HTTPRequest(octets,index+tcp.getTHL()); 
+				if(tcp.getSourcePort().equals("00 50 ")) return new HTTPResponse(octets,index+tcp.getTHL());
+
 			}
-			
+			return null;
 		}
 		
 		
@@ -39,8 +39,10 @@ public class Type {
 			int x = 1;
 			int result = 0;
 			for(int i=c.length()-1; i>=0; i--) {
-				result += Character.getNumericValue(c.charAt(i))*x;
-				x=x*16;
+				if(c.charAt(i)!=' ') {
+					result += Character.getNumericValue(c.charAt(i))*x;
+					x=x*16;
+				}
 			}
 			return result;
 		}

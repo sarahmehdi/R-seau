@@ -1,10 +1,12 @@
  package Lecture;
 
+import java.io.PrintWriter;
 import java.util.List;
 
 
 public class Trame {
 	
+	private static int count = 0;
 	private List<Octet> octets;
 	
 	private String addrMacSource;
@@ -25,15 +27,18 @@ public class Trame {
 	private String protocol;
 	private String checksum;
 	private int checksumInt;
-	private int options=0;
+	
+	private ITransportProtocol transport;
 		
 	
 	public Trame(List<Octet> o) throws InvalidTrameException {
 		if(o == null) throw new IllegalArgumentException();
-		octets=o;
+		if(o.size() < 66) throw new InvalidTrameException("La trame est trop courte, veuillez saisir une trame valide");
+		octets = o;
 		initEnteteEthernet();
 		initPaquetIp();		
-		initDonnees();
+		initTransport();
+		count++;
 	}
 	
 	private void initEnteteEthernet() {
@@ -59,8 +64,6 @@ public class Trame {
 		//initiatiser les addresses ip et tout ce qu'il y'a quand le paquet ip
 		taille= 4*Character.getNumericValue(octets.get(14).getSecondHexa());
 		if(taille < 20) throw new InvalidTrameException("le IHL de la trame est invalde (IHL ="+taille+")");
-		if(taille > 20) 
-			options = taille - 20;
 		
 		bytes = "0x"+octets.get(16)+octets.get(17);
 		bytesInt = octets.get(16).toDecimale()*16 + octets.get(17).toDecimale();
@@ -100,42 +103,49 @@ public class Trame {
 	}
 	
 	
-	private void initDonnees() {
-		// init les données si il y'en a 
+	private void initTransport() {
+		 transport = Type.getProtocol(protocol, octets, taille+14);
 	}
 	
 	
 	
-	public void afficher() {
+	public void afficher(PrintWriter out) {
 		
-		System.out.println("Ethernet :");
-		System.out.println("      Adresse MAC source : "+addrMacSource);
-		System.out.println("      Adresse MAC Destination : "+addrMacDest);
+		out.write("\n # TRAME "+count+'\n');
+		out.write("Ethernet :\n");
+		out.write("      Adresse MAC source : "+addrMacSource+'\n');
+		out.write("      Adresse MAC Destination : "+addrMacDest+'\n');
  
-		System.out.println("      Type : "+EthType+" ("+Type.getEthType(EthType)+")");
+		out.write("      Type : "+EthType+" ("+Type.getEthType(EthType)+")\n");
 		
 		if(Type.getEthType(EthType).equals("Unknown")) {
-			System.out.println("Le type de protocol n'est pas reconnu, on ne peut donc pas analyser votre trame :/");
+			out.write("Le type de protocol n'est pas reconnu, on ne peut donc pas analyser votre trame :/");
+			return ;
+		} 
+		
+		out.write(Type.getEthType(EthType)+" :\n");
+		out.write("      Version : "+version+'\n');
+		out.write("      IHL : "+taille+" bytes\n");
+		out.write("      Total length : "+bytes+" ("+bytesInt+")\n");
+		out.write("      Identifier : "+identifier+'\n');
+		out.write("            DF : "+DF+'\n');
+		out.write("            MF : "+MF+'\n');
+		out.write("      Fragement Offset : "+fragmentOffset+'\n');
+		out.write("      Adresse IP Source : "+addrIPsource+'\n');
+		out.write("      Adresse IP Destination : "+addrIPdest+'\n');
+		
+		out.write("      Time To Leave : "+TTL+'\n');
+		out.write("      Checksum IP : "+checksum+" ("+checksumInt+")\n");
+		if(transport == null) {
+			out.write("Le protocol de transport n'est pas reconnu, on ne peut donc pas poursuivre l'analyse de votre trame :/ \n");
 			return ;
 		}
-		
-		System.out.println(Type.getEthType(EthType)+" :");
-		System.out.println("      Version : "+version);
-		System.out.println("      IHL : "+taille+" bytes");
-		System.out.println("      Total length : "+bytes+" ("+bytesInt+")");
-		System.out.println("      Identifier : "+identifier);
-		System.out.println("            DF : "+DF);
-		System.out.println("            MF : "+MF);
-		System.out.println("      Fragement Offset : "+fragmentOffset);
-		System.out.println("      Adresse IP Source : "+addrIPsource);
-		System.out.println("      Adresse IP Destination : "+addrIPdest);
-		
-		System.out.println("      Time To Leave : "+TTL);
-		System.out.println("      Checksum IP : "+checksum+" ("+checksumInt+")");
-		System.out.println("      "+Type.getProtocol(protocol, octets, taille+14).toString() );
-		
-		
-		System.out.println('\n');
-	
+		out.write(transport.toString()+'\n');
+		IHTTP http = Type.getHttp(transport, octets, taille+14);
+		if(http==null) {
+			out.write("Le type d'application n'est pas reconnu, on ne peut donc pas poursuivre l'analyse de votre trame :/ \n");
+			return ;
+		}
+		out.write(http.toString()+'\n');
 	}
 }

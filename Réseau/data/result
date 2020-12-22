@@ -1,0 +1,37 @@
+
+ # TRAME 1
+Ethernet :
+      Adresse MAC source : 00 : 01 : 02 : a5 : fc : 8d 
+      Adresse MAC Destination : 00 : 01 : 02 : a5 : fb : 3a 
+      Type : 0x08 00  (IPv4)
+IPv4 :
+      Version : 4
+      IHL : 20 bytes
+      Total length : 0x00 3c  (60)
+      Identifier : 0xec 26 
+            DF : 0 (no)
+            MF : 0 (no)
+      Fragement Offset : 0
+      Adresse IP Source : 10.33.182.182
+      Adresse IP Destination : 132.227.60.13
+      Time To Leave : 40 
+      Checksum IP : 0xcc cd  (3469)
+      Protocol : OxO6 (TCP) 
+TCP : 
+      Source port number : 0e b5 
+      Destination port number : 00 50 
+      Sequence Number : a9 55 92 64 
+      Acknowledge Number : 00 00 00 00 
+      THL : 0xa
+      Flag : SYN
+      Window : 0x3e bc 
+      Checksum : 0xa3 74  (2724) 
+
+HTTP : HTTPRequest 
+      Methode : GET
+      URL : /~spathis/
+      Version :  HTTP/1.1
+      Host: www-npa.lip6.fr
+      Connection: keep-alive
+      Upgrade-Insecure-Requests: 1
+      User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6

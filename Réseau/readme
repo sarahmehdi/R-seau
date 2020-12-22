@@ -3,22 +3,20 @@ une classe octet : Elle initialise une chaine de caractère hexa de deux caractèr
 				   une methode toBinary() qui converti l'hexa en binaire et des méthodes getFirtsHexa() et getSecondHexa() 
 				   
 une classe Trame : Elle parcourt une liste d'octets et initialise l'entete de l'ethernet, paquetIp et les données elle a une méthode afficher qui affiche
-					les addresses mac dest et source, protocole et type
+					les adresses mac dest et source, protocole et type
 					
-une classe TCP : 
+une classe TCP,ICMP,UDP : implémentent l'interface Itransport protocol contiennent des méthodes getType() et getName(), La classe Tcp contient en plus des getters pou renoyer la aleur du port dource et le port destination et une méthode getFlag() . 
+                          
 
-une classe ICMP: 
+une classe HTTPRquest:  parcourt la liste des octets à partir d'un certains index et convertit le code ascii codé en héxa en char implémente IHTTP
 
-une classe UDP:
+une classe HTTPResponse: parcourt la liste des octets à partir d'un certains index et convertit le code ascii codé en héxa en char Implémente IHTTP 
 
-une classe HTTPRquest:  parcourt la liste des octets à partir d'un certains index et convertit le code ascii codé en héxa en char 
-
-une classe HTTPResponse: parcourt la liste des octets à partir d'un certains index et convertit le code ascii codé en héxa en char 
-
-une classe Type : 
+une classe Type : à partir d'une trame elle teste les types possible et  retourne soit un TCP, ICMP, UDP soit Unknown 
+					et fait des tests pour Httprequest ou Httpresponse 
 
 
-Hypothèses sur la trame :
+Conditions sur la trame:
 
 	ignorer l’offset (ne pas le lire)
 	
@@ -33,3 +31,5 @@ Hypothèses sur la trame :
 	les octets dépassant deux caractères
 	
 	protocol  Unknown
+	
+	ligne vide signale une erreur 

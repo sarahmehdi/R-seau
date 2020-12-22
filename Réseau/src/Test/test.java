@@ -1,8 +1,12 @@
 package Test;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,16 +21,18 @@ public class test {
 		List<Octet> octets = new ArrayList<>();
 		Trame tr;
 		
+		PrintWriter out = new PrintWriter(new FileOutputStream("data/result"));
+		
 		int offsetControl = 0;
 		int lastlength = 16;
 		int count = 0;
 		while((line = br.readLine())!=null) {
 			
 			String[] s = line.split(" ");
-			if(s[0].equals("00")) {
+			if(Type.hexaToInt(s[0])==0) {
 				if(octets.size()>0) {
 					tr = new Trame(octets);
-					tr.afficher();
+					tr.afficher(out);
 				}
 				octets = new ArrayList<>();
 				offsetControl = 0;
@@ -47,7 +53,10 @@ public class test {
 			count++;
 		}
 		tr = new Trame(octets);
-		tr.afficher();
+		tr.afficher(out);
+		
+		out.close();
+		br.close();
 	} catch(IOException e) {
 		e.printStackTrace();
 	} catch(InvalidTrameException e) {
